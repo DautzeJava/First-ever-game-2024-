@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "sdl.h": "c",
+        "orc.h": "c",
+        "sdl_image.h": "c",
+        "sdl_mixer.h": "c",
+        "math.h": "c",
+        "sdl2_rotozoom.h": "c",
+        "stdio.h": "c",
+        "sdl2_gfxprimitives.h": "c"
+    }
+}
