@@ -26,8 +26,8 @@ Orc *createOrc(int pv, int attack, SDL_Renderer *render, const char *imagePath) 
     orc->rect.h = ORC_HEIGHT;
     orc->rect.w = ORC_WIDTH;
 
-    // Chargement de l'image statique de l'orc
-    SDL_Surface *skin = IMG_Load("src\\images\\Orc-static.png");
+    // Chargement de l'image statique de l'orc (Chemin corrigé)
+    SDL_Surface *skin = IMG_Load("images/Orc-static.png");
     if (skin == NULL) {
         fprintf(stderr, "Erreur dans la création de la surface de l'orc : %s\n", IMG_GetError());
         free(orc);
@@ -60,7 +60,8 @@ void destroyOrc(Orc *orc)
 // Fonction pour animer l'attaque de l'orc
 void attackOrcIn(Orc *orc, SDL_Renderer *render, SDL_bool attacking) 
 {
-    SDL_Surface *attackAnimationBaseSurface = IMG_Load("src\\images\\Orc-Attack01Test.png");
+    // Chemin corrigé
+    SDL_Surface *attackAnimationBaseSurface = IMG_Load("images/Orc-Attack01Test.png");
     if (attackAnimationBaseSurface == NULL) {
         fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
         return;
@@ -99,8 +100,8 @@ void attackOrcIn(Orc *orc, SDL_Renderer *render, SDL_bool attacking)
 
 // Fonction pour animer la fin de l'attaque de l'orc
 void attackOrcOut(Orc *orc, SDL_Renderer *render) {
-    // Chargement de l'animation de fin d'attaque
-    SDL_Surface *attackAnimationBaseSurface = IMG_Load("src\\images\\Orc-Attack02.png");
+    // Chemin corrigé
+    SDL_Surface *attackAnimationBaseSurface = IMG_Load("images/Orc-Attack02.png");
     if (attackAnimationBaseSurface == NULL) {
         fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
         return;
@@ -116,14 +117,14 @@ void attackOrcOut(Orc *orc, SDL_Renderer *render) {
     }
 
     Mix_Chunk *soundAttack = NULL;
-    soundAttack = Mix_LoadWAV("src\\sound\\soundAttack.wav");
+    // Chemin corrigé
+    soundAttack = Mix_LoadWAV("sound/soundAttack.wav");
     if(soundAttack == NULL)
     {
-        fprintf(stderr, "Erreur dans la lecture de soundAttack");
+        fprintf(stderr, "Erreur dans la lecture de soundAttack: %s\n", Mix_GetError());
     }
     Mix_VolumeChunk(soundAttack, 8);
     Mix_PlayChannel(-1, soundAttack, 0);
-
 
     // Affichage de l'animation de fin d'attaque
     SDL_RenderClear(render);
@@ -131,14 +132,18 @@ void attackOrcOut(Orc *orc, SDL_Renderer *render) {
     SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
     SDL_RenderPresent(render);
     SDL_Delay(400); // Attendre un court moment
-    soundAttack = NULL;
+    
+    // CORRECTION DU BUG DE MEMOIRE : Libérer avant de mettre à NULL
     Mix_FreeChunk(soundAttack);
+    soundAttack = NULL;
+    
     SDL_DestroyTexture(attackAnimation); // Libération de la texture après utilisation
 }
 
 void attackOrcInReverse(Orc *orc, SDL_Renderer *render, SDL_bool attacking) 
 {
-    SDL_Surface *attackAnimationBaseSurface = IMG_Load("src\\images\\Orc-Attack01TestReverse.png");
+    // Chemin corrigé
+    SDL_Surface *attackAnimationBaseSurface = IMG_Load("images/Orc-Attack01TestReverse.png");
     if (attackAnimationBaseSurface == NULL) {
         fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
         return;
@@ -177,8 +182,8 @@ void attackOrcInReverse(Orc *orc, SDL_Renderer *render, SDL_bool attacking)
 
 // Fonction pour animer la fin de l'attaque de l'orc
 void attackOrcOutReverse(Orc *orc, SDL_Renderer *render) {
-    // Chargement de l'animation de fin d'attaque
-    SDL_Surface *attackAnimationBaseSurface = IMG_Load("src\\images\\Orc-Attack02Reverse.png");
+    // Chemin corrigé
+    SDL_Surface *attackAnimationBaseSurface = IMG_Load("images/Orc-Attack02Reverse.png");
     if (attackAnimationBaseSurface == NULL) {
         fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
         return;
@@ -194,14 +199,14 @@ void attackOrcOutReverse(Orc *orc, SDL_Renderer *render) {
     }
 
     Mix_Chunk *soundAttack = NULL;
-    soundAttack = Mix_LoadWAV("src\\sound\\soundAttack.wav");
+    // Chemin corrigé
+    soundAttack = Mix_LoadWAV("sound/soundAttack.wav");
     if(soundAttack == NULL)
     {
-        fprintf(stderr, "Erreur dans la lecture de soundAttack");
+        fprintf(stderr, "Erreur dans la lecture de soundAttack: %s\n", Mix_GetError());
     }
     Mix_VolumeChunk(soundAttack, 8);
     Mix_PlayChannel(-1, soundAttack, 0);
-
 
     // Affichage de l'animation de fin d'attaque
     SDL_RenderClear(render);
@@ -209,12 +214,13 @@ void attackOrcOutReverse(Orc *orc, SDL_Renderer *render) {
     SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
     SDL_RenderPresent(render);
     SDL_Delay(400); // Attendre un court moment
-    soundAttack = NULL;
+    
+    // CORRECTION DU BUG DE MEMOIRE : Libérer avant de mettre à NULL
     Mix_FreeChunk(soundAttack);
+    soundAttack = NULL;
+    
     SDL_DestroyTexture(attackAnimation); // Libération de la texture après utilisation
 }
-
-
 
 void movRight(Orc * orc)
 {
@@ -227,7 +233,6 @@ void movLeft(Orc * orc)
     if(orc->rect.x > 0 + 12)
     orc->rect.x -= 20;
     SDL_Delay(80);
-
 }
 void movBottom(Orc * orc)
 {
@@ -241,24 +246,26 @@ void movUp(Orc * orc)
     orc->rect.y -= 24;
     SDL_Delay(80);
 }
+
 void walkSoundEffect()
 {
-
-    Mix_Chunk *walkSound = NULL;
-    walkSound = Mix_LoadWAV("src\\sound\\walkSound.wav");
+    // Utilisation de static pour ne charger le son qu'une seule fois
+    static Mix_Chunk *walkSound = NULL;
     if(walkSound == NULL)
     {
-        fprintf(stderr, "Erreur dans le chargement de walkSound");
+        walkSound = Mix_LoadWAV("sound/walkSound.wav");
+        if(walkSound == NULL)
+        {
+            fprintf(stderr, "Erreur dans le chargement de walkSound: %s\n", Mix_GetError());
+        }
     }
     Mix_VolumeChunk(walkSound, 100);
     Mix_PlayChannel(-1, walkSound, 0);
-    checkFreeWalkSound(walkSound);
-    
 }
 
 void checkFreeWalkSound(Mix_Chunk *walkSound)
 {
-    if(walkSoundEffect != NULL && Mix_Playing(-1) == 0)
+    if(walkSound != NULL && Mix_Playing(-1) == 0)
     {
         Mix_FreeChunk(walkSound);
     }

@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Création de l'orc et chargement de sa texture
-    Orc *orc = createOrc(200, 100, render, "src\\images\\Orc.png");
+    Orc *orc = createOrc(200, 100, render, "images/Orc.png");
     if (orc == NULL) {
         cleanQuit(window, render, NULL, NULL);
         return EXIT_FAILURE;
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Chargement de la musique de fond
-    Mix_Music *music = Mix_LoadMUS("src\\sound\\underTale.mp3");
+    Mix_Music *music = Mix_LoadMUS("sound/underTale.mp3");
     if (music == NULL) {
         fprintf(stderr, "Erreur dans le chargement du fichier sonore : %s\n", Mix_GetError());
         cleanQuit(window, render, orc->texture, NULL);
@@ -83,25 +83,31 @@ int main(int argc, char *argv[]) {
                             movRight(orc);
                             i++;
                             if (!movToRight) {
+                                SDL_DestroyTexture(orc->texture); // Évite la fuite de mémoire
                                 orc->texture = reverseOrcToRight(orc, render);
                             }
                             movToRight = SDL_TRUE;
+                            if (i == 1) walkSoundEffect();
                             break;
                         case SDLK_q:
                             movLeft(orc);
                             i++;
                             if (movToRight) {
+                                SDL_DestroyTexture(orc->texture); // Évite la fuite de mémoire
                                 orc->texture = reverseOrcToLeft(orc, render);
                             }
                             movToRight = SDL_FALSE;
+                            if (i == 1) walkSoundEffect();
                             break;
                         case SDLK_z:
                             movUp(orc);
                             i++;
+                            if (i == 1) walkSoundEffect();
                             break;
                         case SDLK_s:
                             movBottom(orc);
                             i++;
+                            if (i == 1) walkSoundEffect();
                             break;
                         case SDLK_x:
                             if (!attacking) {
@@ -128,14 +134,10 @@ int main(int argc, char *argv[]) {
                         case SDLK_z:
                         case SDLK_s:
                             i = 0;
+                            Mix_HaltChannel(-1); // Arrête le son de marche au relâchement
                             break;
                         default:
                             break;
-                    }
-                    if (i == 1) {
-                        walkSoundEffect();
-                    } else if (i == 0) {
-                        Mix_HaltChannel(-1); // Arrête tous les effets sonores en cours
                     }
                     break;
                 default:
@@ -149,12 +151,6 @@ int main(int argc, char *argv[]) {
         // Dessiner l'arrière-plan
         loadBackground(render, orc);
 
-        // Effet blur
-        // boxRGBA(render, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 150, 150, 150, 150);
-
-        // Crée le menu
-        // createMenu(render);
-
         // Dessiner l'orc
         SDL_RenderCopy(render, orc->texture, NULL, &orc->rect);
 
@@ -167,7 +163,8 @@ int main(int argc, char *argv[]) {
 
     // Nettoyage et fermeture du programme
     destroyOrc(orc);
-    cleanQuit(window, render, orc->texture, music);
+    // On passe NULL pour la texture car destroyOrc est censé l'avoir déjà libérée
+    cleanQuit(window, render, NULL, music); 
     return 0;
 }
 
@@ -194,7 +191,7 @@ void cleanQuit(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *texture,
 
 // Fonction pour charger l'animation d'attaque vers la droite
 SDL_Texture *reverseOrcToRight(Orc *orc, SDL_Renderer *render) {
-    SDL_Surface *orcStaticToRight = IMG_Load("src\\images\\Orc-static.png");
+    SDL_Surface *orcStaticToRight = IMG_Load("images/Orc-static.png");
     if (orcStaticToRight == NULL) {
         fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
         return NULL;
@@ -213,7 +210,7 @@ SDL_Texture *reverseOrcToRight(Orc *orc, SDL_Renderer *render) {
 
 // Fonction pour charger l'animation d'attaque vers la gauche
 SDL_Texture *reverseOrcToLeft(Orc *orc, SDL_Renderer *render) {
-    SDL_Surface *orcStaticToLeft = IMG_Load("src\\images\\Orc-static-reverse.png");
+    SDL_Surface *orcStaticToLeft = IMG_Load("images/Orc-static-reverse.png");
     if (orcStaticToLeft == NULL) {
         fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
         return NULL;
@@ -232,16 +229,17 @@ SDL_Texture *reverseOrcToLeft(Orc *orc, SDL_Renderer *render) {
 
 // Fonction pour jouer l'effet sonore de marche
 static void walkSoundEffect() {
-    Mix_Chunk *walkSound = Mix_LoadWAV("src\\sound\\walkSound.wav");
+    // Le mot-clé static permet de ne charger le son qu'une seule fois en mémoire
+    static Mix_Chunk *walkSound = NULL; 
+    
     if (walkSound == NULL) {
-        fprintf(stderr, "Erreur dans le chargement du son de marche : %s\n", Mix_GetError());
-        return;
+        walkSound = Mix_LoadWAV("sound/walkSound.wav");
+        if (walkSound == NULL) {
+            fprintf(stderr, "Erreur dans le chargement du son de marche : %s\n", Mix_GetError());
+            return;
+        }
+        Mix_VolumeChunk(walkSound, MIX_MAX_VOLUME / 2);
     }
 
-    Mix_VolumeChunk(walkSound, MIX_MAX_VOLUME / 2); // Réglage du volume du son de marche
-    Mix_PlayChannel(-1, walkSound, 0); // Jouer le son sur un canal libre
+    Mix_PlayChannel(-1, walkSound, 0);
 }
-
-
-// gcc src/main.c -o bin/prog -I include -L lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer
-// gcc src/*.c -o bin/prog -I include -L lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer
