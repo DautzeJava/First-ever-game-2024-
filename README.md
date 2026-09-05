@@ -1,10 +1,10 @@
 First game in C
 
-Next features : \n
--Menu \n
--Mobs \n
--PvE \n
--Rework fight animation \n
+Next features :
+-Menu
+-Mobs
+-PvE
+-Rework fight animation
 -New attacks
 
 
