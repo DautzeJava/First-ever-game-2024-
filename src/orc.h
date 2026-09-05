@@ -28,7 +28,7 @@ typedef struct Orc {
 } Orc;
 
 Orc *createOrc(int pv, int attack, SDL_Renderer *render, const char *imagePath);
-void loadBackground(SDL_Renderer *render, Orc* orc);
+void loadBackgroundA(SDL_Renderer *render, Orc* orc);
 void destroyOrc(Orc *orc);
 void attackOrcIn(Orc *orc, SDL_Renderer *render, SDL_bool attacking);
 void attackOrcInReverse(Orc *orc, SDL_Renderer *render, SDL_bool attacking);

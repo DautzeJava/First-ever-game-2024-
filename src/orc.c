@@ -88,11 +88,11 @@ void attackOrcIn(Orc *orc, SDL_Renderer *render, SDL_bool attacking)
         }
 
         SDL_RenderClear(render);
-        loadBackground(render, orc);
+        loadBackgroundA(render, orc);
         SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
         SDL_RenderPresent(render);
         // Utilisez une temporisation basée sur le temps écoulé depuis le dernier rendu
-        SDL_Delay(1000 / 60); // Maintenir un framerate de 60 FPS
+        SDL_Delay(1000 / 165); // Maintenir un framerate de 60 FPS
     }
 
     SDL_DestroyTexture(attackAnimation); // Libération de la texture après utilisation
@@ -128,10 +128,10 @@ void attackOrcOut(Orc *orc, SDL_Renderer *render) {
 
     // Affichage de l'animation de fin d'attaque
     SDL_RenderClear(render);
-    loadBackground(render, orc);
+    loadBackgroundA(render, orc);
     SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
     SDL_RenderPresent(render);
-    SDL_Delay(400); // Attendre un court moment
+    SDL_Delay(500); // Attendre un court moment
     
     // CORRECTION DU BUG DE MEMOIRE : Libérer avant de mettre à NULL
     Mix_FreeChunk(soundAttack);
@@ -170,11 +170,11 @@ void attackOrcInReverse(Orc *orc, SDL_Renderer *render, SDL_bool attacking)
         }
 
         SDL_RenderClear(render);
-        loadBackground(render, orc);
+        loadBackgroundA(render, orc);
         SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
         SDL_RenderPresent(render);
         // Utilisez une temporisation basée sur le temps écoulé depuis le dernier rendu
-        SDL_Delay(1000 / 60); // Maintenir un framerate de 60 FPS
+        SDL_Delay(1000 / 165); // Maintenir un framerate de 60 FPS
     }
 
     SDL_DestroyTexture(attackAnimation); // Libération de la texture après utilisation
@@ -210,10 +210,10 @@ void attackOrcOutReverse(Orc *orc, SDL_Renderer *render) {
 
     // Affichage de l'animation de fin d'attaque
     SDL_RenderClear(render);
-    loadBackground(render, orc);
+    loadBackgroundA(render, orc);
     SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
     SDL_RenderPresent(render);
-    SDL_Delay(400); // Attendre un court moment
+    SDL_Delay(500); // Attendre un court moment
     
     // CORRECTION DU BUG DE MEMOIRE : Libérer avant de mettre à NULL
     Mix_FreeChunk(soundAttack);

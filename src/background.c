@@ -9,7 +9,7 @@
 #include "SDL2_gfxPrimitives.h"
 #include "SDL2_rotozoom.h"
 
-void loadBackground(SDL_Renderer *render, Orc* orc)
+void loadBackgroundA(SDL_Renderer *render, Orc* orc)
 {
     // Chemin corrigé
     SDL_Surface *backgroundImage = IMG_Load("images/background1F.png");

@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
 
     // Lecture en boucle de la musique
     Mix_PlayMusic(music, -1);
-    Mix_VolumeMusic(10); // Réglage du volume de la musique (0-128)
+    Mix_VolumeMusic(8); // Réglage du volume de la musique (0-128)
 
     // Variables pour le déplacement et les animations
     SDL_bool prog_launched = SDL_TRUE;
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
                             movToRight = SDL_TRUE;
                             if (i == 1) walkSoundEffect();
                             break;
-                        case SDLK_q:
+                        case SDLK_a:
                             movLeft(orc);
                             i++;
                             if (movToRight) {
@@ -99,7 +99,7 @@ int main(int argc, char *argv[]) {
                             movToRight = SDL_FALSE;
                             if (i == 1) walkSoundEffect();
                             break;
-                        case SDLK_z:
+                        case SDLK_w:
                             movUp(orc);
                             i++;
                             if (i == 1) walkSoundEffect();
@@ -130,8 +130,8 @@ int main(int argc, char *argv[]) {
                 case SDL_KEYUP:
                     switch (event.key.keysym.sym) {
                         case SDLK_d:
-                        case SDLK_q:
-                        case SDLK_z:
+                        case SDLK_a:
+                        case SDLK_w:
                         case SDLK_s:
                             i = 0;
                             Mix_HaltChannel(-1); // Arrête le son de marche au relâchement
@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
         SDL_RenderClear(render);
 
         // Dessiner l'arrière-plan
-        loadBackground(render, orc);
+        loadBackgroundA(render, orc);
 
         // Dessiner l'orc
         SDL_RenderCopy(render, orc->texture, NULL, &orc->rect);
@@ -158,7 +158,7 @@ int main(int argc, char *argv[]) {
         SDL_RenderPresent(render);
 
         // Limiter la fréquence d'images
-        SDL_Delay(1000 / 60);
+        SDL_Delay(1000 / 165);
     }
 
     // Nettoyage et fermeture du programme
