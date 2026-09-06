@@ -13,7 +13,6 @@
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 #include <math.h>
-#include "orc.h"
 #include "SDL2_gfxPrimitives.h"
 #include "SDL2_rotozoom.h"
 
@@ -34,13 +33,14 @@ void attackOrcIn(Orc *orc, SDL_Renderer *render, SDL_bool attacking);
 void attackOrcInReverse(Orc *orc, SDL_Renderer *render, SDL_bool attacking);
 void attackOrcOut(Orc *orc, SDL_Renderer *render);
 void attackOrcOutReverse(Orc *orc, SDL_Renderer *render);
+void attackOrcEnd(Orc *orc, SDL_Renderer *render, SDL_bool attacking);
+void attackOrcEndReverse(Orc *orc, SDL_Renderer *render, SDL_bool attacking);
 static void walkSoundEffect();
 void checkFreeWalkSound(Mix_Chunk *walkSound);
 void movRight(Orc * orc);
 void movLeft(Orc * orc);
 void movBottom(Orc * orc);
 void movUp(Orc * orc);
-void createMenu(SDL_Renderer *render);
 
 
 #endif

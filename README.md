@@ -7,7 +7,6 @@ Next features :
 -Rework fight animation
 -New attacks
 
-
 Credits :
 DautzeJava
 Caracters : Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc

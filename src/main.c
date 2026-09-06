@@ -6,6 +6,7 @@
 #include <SDL_mixer.h>
 #include <math.h>
 #include "orc.h"
+#include "menu.h"
 #include "SDL2_gfxPrimitives.h"
 
 void cleanQuit(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *texture, Mix_Music *music);
@@ -14,6 +15,7 @@ SDL_Texture *reverseOrcToRight(Orc *orc, SDL_Renderer *render);
 void walkSoundEffect();
 
 int main(int argc, char *argv[]) {
+
     // Initialisation de SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         fprintf(stderr, "Erreur lors de l'initialisation de SDL : %s\n", SDL_GetError());
@@ -36,6 +38,74 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
+    int isRunning = 1; // Variable globale qui maintient l'application ouverte
+
+    // ==========================================
+    //      INITIALISATION AUDIO (UNE SEULE FOIS)
+    // ==========================================
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        fprintf(stderr, "Erreur Mix_OpenAudio : %s\n", Mix_GetError());
+        cleanQuit(window, render, NULL, NULL);
+        return EXIT_FAILURE;
+    }
+
+    Mix_Music *musicB = Mix_LoadMUS("sound/underTale.mp3");
+    if (musicB == NULL) {
+        fprintf(stderr, "Erreur chargement musique : %s\n", Mix_GetError());
+        cleanQuit(window, render, NULL, NULL);
+        return EXIT_FAILURE;
+    }
+
+    // On lance la musique avant d'entrer dans les boucles
+    Mix_PlayMusic(musicB, -1);
+    Mix_VolumeMusic(8);
+
+    // ==========================================
+    //            PHASE 1 : LE MENU
+    // ==========================================
+    Menu mainMenu = createMenu(render);
+    int inMenu = 1;
+
+    while (inMenu && isRunning) {
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) { 
+                inMenu = 0; 
+                isRunning = 0; // Si on ferme la fenêtre, on annule aussi le jeu
+            }
+            
+            // Clic de souris
+            if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
+                int mouseX = event.button.x;
+                int mouseY = event.button.y;
+                int MuteClicked = 0;
+                
+                // Si on clique sur Play
+                if (mouseX >= mainMenu.playButtonRect.x && mouseX <= (mainMenu.playButtonRect.x + mainMenu.playButtonRect.w) &&
+                    mouseY >= mainMenu.playButtonRect.y && mouseY <= (mainMenu.playButtonRect.y + mainMenu.playButtonRect.h)) {
+                    inMenu = 0; // On quitte la boucle du menu !
+                    
+                }
+                if (mouseX >= mainMenu.soundMuteButtonRect.x && mouseX <= (mainMenu.soundMuteButtonRect.x + mainMenu.soundMuteButtonRect.w) 
+                && mouseY >= mainMenu.soundMuteButtonRect.y && mouseY <= (mainMenu.soundMuteButtonRect.y + mainMenu.soundMuteButtonRect.h)) {
+                Mix_VolumeMusic(0);
+                
+                }
+            }
+        }
+        
+        // Affichage du menu
+        SDL_RenderClear(render);
+        SDL_RenderCopy(render, mainMenu.background, NULL, NULL); 
+        SDL_RenderCopy(render, mainMenu.soundMuteButton, NULL, &mainMenu.soundMuteButtonRect);
+        SDL_RenderCopy(render, mainMenu.playButton, NULL, &mainMenu.playButtonRect);
+        SDL_RenderPresent(render);
+        
+    }
+
+    // ON NETTOIE LE MENU : L'image du menu disparaît de la RAM pour laisser la place au jeu
+    destroyMenu(&mainMenu);
+
     // Création de l'orc et chargement de sa texture
     Orc *orc = createOrc(200, 100, render, "images/Orc.png");
     if (orc == NULL) {
@@ -43,15 +113,9 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    // Initialisation de la bibliothèque SDL_mixer pour l'audio
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
-        fprintf(stderr, "Erreur dans l'ouverture du module audio SDL_mixer : %s\n", Mix_GetError());
-        cleanQuit(window, render, orc->texture, NULL);
-        return EXIT_FAILURE;
-    }
 
     // Chargement de la musique de fond
-    Mix_Music *music = Mix_LoadMUS("sound/underTale.mp3");
+    Mix_Music *music = Mix_LoadMUS("sound/Zelda.mp3");
     if (music == NULL) {
         fprintf(stderr, "Erreur dans le chargement du fichier sonore : %s\n", Mix_GetError());
         cleanQuit(window, render, orc->texture, NULL);
@@ -60,7 +124,8 @@ int main(int argc, char *argv[]) {
 
     // Lecture en boucle de la musique
     Mix_PlayMusic(music, -1);
-    Mix_VolumeMusic(8); // Réglage du volume de la musique (0-128)
+    Mix_VolumeMusic(15); // Réglage du volume de la musique (0-128)
+    
 
     // Variables pour le déplacement et les animations
     SDL_bool prog_launched = SDL_TRUE;
@@ -114,12 +179,14 @@ int main(int argc, char *argv[]) {
                                 attacking = SDL_TRUE;
                                 if (movToRight) {
                                     attackOrcIn(orc, render, attacking);
-                                    attacking = SDL_FALSE;
                                     attackOrcOut(orc, render);
+                                    attackOrcEnd(orc, render, attacking);
+                                    attacking = SDL_FALSE;
                                 } else {
                                     attackOrcInReverse(orc, render, attacking);
-                                    attacking = SDL_FALSE;
                                     attackOrcOutReverse(orc, render);
+                                    attackOrcEndReverse(orc, render, attacking);
+                                    attacking = SDL_FALSE;
                                 }
                             }
                             break;

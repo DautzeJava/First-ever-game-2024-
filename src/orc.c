@@ -75,28 +75,17 @@ void attackOrcIn(Orc *orc, SDL_Renderer *render, SDL_bool attacking)
         return;
     }
 
-    while (attacking) {
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_x) {
-                attacking = SDL_FALSE;
-            }
-            if (event.type == SDL_QUIT) {
-                attacking = SDL_FALSE;
-                break;
-            }
-        }
-
-        SDL_RenderClear(render);
-        loadBackgroundA(render, orc);
-        SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
-        SDL_RenderPresent(render);
-        // Utilisez une temporisation basée sur le temps écoulé depuis le dernier rendu
-        SDL_Delay(1000 / 165); // Maintenir un framerate de 60 FPS
-    }
+    SDL_RenderClear(render);
+    loadBackgroundA(render, orc);
+    SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
+    SDL_RenderPresent(render);
+    
+    SDL_Delay(300); // Temps de préparation
 
     SDL_DestroyTexture(attackAnimation); // Libération de la texture après utilisation
 }
+
+
 
 // Fonction pour animer la fin de l'attaque de l'orc
 void attackOrcOut(Orc *orc, SDL_Renderer *render) {
@@ -122,21 +111,52 @@ void attackOrcOut(Orc *orc, SDL_Renderer *render) {
     if(soundAttack == NULL)
     {
         fprintf(stderr, "Erreur dans la lecture de soundAttack: %s\n", Mix_GetError());
+    } else {
+        Mix_VolumeChunk(soundAttack, 8);
+        Mix_PlayChannel(-1, soundAttack, 0);
     }
-    Mix_VolumeChunk(soundAttack, 8);
-    Mix_PlayChannel(-1, soundAttack, 0);
 
     // Affichage de l'animation de fin d'attaque
     SDL_RenderClear(render);
     loadBackgroundA(render, orc);
     SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
     SDL_RenderPresent(render);
-    SDL_Delay(500); // Attendre un court moment
+    
+    SDL_Delay(300); // Temps d'impact
     
     // CORRECTION DU BUG DE MEMOIRE : Libérer avant de mettre à NULL
-    Mix_FreeChunk(soundAttack);
-    soundAttack = NULL;
+    if (soundAttack != NULL) {
+        Mix_FreeChunk(soundAttack);
+        soundAttack = NULL;
+    }
     
+    SDL_DestroyTexture(attackAnimation); // Libération de la texture après utilisation
+}
+
+void attackOrcEnd(Orc *orc, SDL_Renderer *render, SDL_bool attacking) 
+{
+    // Chemin corrigé
+    SDL_Surface *attackAnimationBaseSurface = IMG_Load("images/Orc-Attack03.png");
+    if (attackAnimationBaseSurface == NULL) {
+        fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
+        return;
+    }
+
+    SDL_Texture *attackAnimation = SDL_CreateTextureFromSurface(render, attackAnimationBaseSurface);
+    SDL_FreeSurface(attackAnimationBaseSurface);
+
+    if (attackAnimation == NULL) {
+        fprintf(stderr, "Erreur dans la création de la texture d'attaque : %s\n", SDL_GetError());
+        return;
+    }
+
+    SDL_RenderClear(render);
+    loadBackgroundA(render, orc);
+    SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
+    SDL_RenderPresent(render);
+    
+    SDL_Delay(200); // Temps de récupération
+
     SDL_DestroyTexture(attackAnimation); // Libération de la texture après utilisation
 }
 
@@ -157,25 +177,12 @@ void attackOrcInReverse(Orc *orc, SDL_Renderer *render, SDL_bool attacking)
         return;
     }
 
-    while (attacking) {
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_x) {
-                attacking = SDL_FALSE;
-            }
-            if (event.type == SDL_QUIT) {
-                attacking = SDL_FALSE;
-                break;
-            }
-        }
-
-        SDL_RenderClear(render);
-        loadBackgroundA(render, orc);
-        SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
-        SDL_RenderPresent(render);
-        // Utilisez une temporisation basée sur le temps écoulé depuis le dernier rendu
-        SDL_Delay(1000 / 165); // Maintenir un framerate de 60 FPS
-    }
+    SDL_RenderClear(render);
+    loadBackgroundA(render, orc);
+    SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
+    SDL_RenderPresent(render);
+    
+    SDL_Delay(300);
 
     SDL_DestroyTexture(attackAnimation); // Libération de la texture après utilisation
 }
@@ -204,21 +211,52 @@ void attackOrcOutReverse(Orc *orc, SDL_Renderer *render) {
     if(soundAttack == NULL)
     {
         fprintf(stderr, "Erreur dans la lecture de soundAttack: %s\n", Mix_GetError());
+    } else {
+        Mix_VolumeChunk(soundAttack, 8);
+        Mix_PlayChannel(-1, soundAttack, 0);
     }
-    Mix_VolumeChunk(soundAttack, 8);
-    Mix_PlayChannel(-1, soundAttack, 0);
 
     // Affichage de l'animation de fin d'attaque
     SDL_RenderClear(render);
     loadBackgroundA(render, orc);
     SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
     SDL_RenderPresent(render);
-    SDL_Delay(500); // Attendre un court moment
+    
+    SDL_Delay(300);
     
     // CORRECTION DU BUG DE MEMOIRE : Libérer avant de mettre à NULL
-    Mix_FreeChunk(soundAttack);
-    soundAttack = NULL;
+    if (soundAttack != NULL) {
+        Mix_FreeChunk(soundAttack);
+        soundAttack = NULL;
+    }
     
+    SDL_DestroyTexture(attackAnimation); // Libération de la texture après utilisation
+}
+
+void attackOrcEndReverse(Orc *orc, SDL_Renderer *render, SDL_bool attacking) 
+{
+    // Chemin corrigé
+    SDL_Surface *attackAnimationBaseSurface = IMG_Load("images/Orc-Attack03Reverse.png");
+    if (attackAnimationBaseSurface == NULL) {
+        fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
+        return;
+    }
+
+    SDL_Texture *attackAnimation = SDL_CreateTextureFromSurface(render, attackAnimationBaseSurface);
+    SDL_FreeSurface(attackAnimationBaseSurface);
+
+    if (attackAnimation == NULL) {
+        fprintf(stderr, "Erreur dans la création de la texture d'attaque : %s\n", SDL_GetError());
+        return;
+    }
+
+    SDL_RenderClear(render);
+    loadBackgroundA(render, orc);
+    SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
+    SDL_RenderPresent(render);
+    
+    SDL_Delay(200);
+
     SDL_DestroyTexture(attackAnimation); // Libération de la texture après utilisation
 }
 
