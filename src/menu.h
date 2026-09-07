@@ -19,13 +19,13 @@
 typedef struct {
     SDL_Texture *background;
     SDL_Texture *playButton;
-    SDL_Texture *soundMuteButton;
-    SDL_Rect soundMuteButtonRect;
+    SDL_Texture *soundOnOffButton;
+    SDL_Rect soundOnOffButtonRect;
     SDL_Rect playButtonRect;
 } Menu;
 
 // 2. ENSUITE LES FONCTIONS (qui ont besoin de connaître la structure au-dessus)
 Menu createMenu(SDL_Renderer *renderer);
 void destroyMenu(Menu *myMenu);
-
+void soundOnOff(SDL_Renderer *renderer, Menu *menu);
 #endif

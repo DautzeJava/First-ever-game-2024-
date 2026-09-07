@@ -27,7 +27,7 @@ Orc *createOrc(int pv, int attack, SDL_Renderer *render, const char *imagePath) 
     orc->rect.w = ORC_WIDTH;
 
     // Chargement de l'image statique de l'orc (Chemin corrigé)
-    SDL_Surface *skin = IMG_Load("images/Orc-static.png");
+    SDL_Surface *skin = IMG_Load("images\\SurMesure\\OrcStatic.png");
     if (skin == NULL) {
         fprintf(stderr, "Erreur dans la création de la surface de l'orc : %s\n", IMG_GetError());
         free(orc);

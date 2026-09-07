@@ -86,10 +86,10 @@ int main(int argc, char *argv[]) {
                     inMenu = 0; // On quitte la boucle du menu !
                     
                 }
-                if (mouseX >= mainMenu.soundMuteButtonRect.x && mouseX <= (mainMenu.soundMuteButtonRect.x + mainMenu.soundMuteButtonRect.w) 
-                && mouseY >= mainMenu.soundMuteButtonRect.y && mouseY <= (mainMenu.soundMuteButtonRect.y + mainMenu.soundMuteButtonRect.h)) {
+                if (mouseX >= mainMenu.soundOnOffButtonRect.x && mouseX <= (mainMenu.soundOnOffButtonRect.x + mainMenu.soundOnOffButtonRect.w) 
+                && mouseY >= mainMenu.soundOnOffButtonRect.y && mouseY <= (mainMenu.soundOnOffButtonRect.y + mainMenu.soundOnOffButtonRect.h)) {
                 Mix_VolumeMusic(0);
-                
+                soundOnOff(render, &mainMenu);
                 }
             }
         }
@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
         // Affichage du menu
         SDL_RenderClear(render);
         SDL_RenderCopy(render, mainMenu.background, NULL, NULL); 
-        SDL_RenderCopy(render, mainMenu.soundMuteButton, NULL, &mainMenu.soundMuteButtonRect);
+        SDL_RenderCopy(render, mainMenu.soundOnOffButton, NULL, &mainMenu.soundOnOffButtonRect);
         SDL_RenderCopy(render, mainMenu.playButton, NULL, &mainMenu.playButtonRect);
         SDL_RenderPresent(render);
         
@@ -258,7 +258,7 @@ void cleanQuit(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *texture,
 
 // Fonction pour charger l'animation d'attaque vers la droite
 SDL_Texture *reverseOrcToRight(Orc *orc, SDL_Renderer *render) {
-    SDL_Surface *orcStaticToRight = IMG_Load("images/Orc-static.png");
+    SDL_Surface *orcStaticToRight = IMG_Load("images\\SurMesure\\OrcStatic.png");
     if (orcStaticToRight == NULL) {
         fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
         return NULL;
@@ -277,7 +277,7 @@ SDL_Texture *reverseOrcToRight(Orc *orc, SDL_Renderer *render) {
 
 // Fonction pour charger l'animation d'attaque vers la gauche
 SDL_Texture *reverseOrcToLeft(Orc *orc, SDL_Renderer *render) {
-    SDL_Surface *orcStaticToLeft = IMG_Load("images/Orc-static-reverse.png");
+    SDL_Surface *orcStaticToLeft = IMG_Load("images\\SurMesure\\OrcStaticReverse.png");
     if (orcStaticToLeft == NULL) {
         fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
         return NULL;
