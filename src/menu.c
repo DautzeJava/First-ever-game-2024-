@@ -19,7 +19,7 @@ Menu createMenu(SDL_Renderer *renderer) {
     myMenu.playButton = NULL;
     myMenu.soundOnOffButton = NULL;
 
-    myMenu.background = IMG_LoadTexture(renderer, "images\\BackgroundMenu.png");
+    myMenu.background = IMG_LoadTexture(renderer, "images\\SurMesure\\Background\\BackgroundMenu.png");
     myMenu.playButton = IMG_LoadTexture(renderer, "images\\Prinbles_Asset_UNDER (v 1.1) (9_7_2023)\\png\\Buttons\\Rect\\PlayText\\Default.png");
     myMenu.soundOnOffButton = IMG_LoadTexture(renderer, "images\\Prinbles_Asset_UNDER (v 1.1) (9_7_2023)\\png@2x\\Buttons\\Square\\SoundOn\\Hover@2x.png");
 

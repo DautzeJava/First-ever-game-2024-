@@ -12,7 +12,7 @@
 void loadBackgroundA(SDL_Renderer *render, Orc* orc)
 {
     // Chemin corrigé
-    SDL_Surface *backgroundImage = IMG_Load("images/background1F.png");
+    SDL_Surface *backgroundImage = IMG_Load("images\\SurMesure\\Background\\background1F.png");
     SDL_Rect rectangle;
     
     if(backgroundImage == NULL)

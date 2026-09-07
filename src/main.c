@@ -186,9 +186,6 @@ int main(int argc, char *argv[]) {
                                 }
                             }
                             break;
-                        case SDLK_k:
-                                attackOrc(orc, render);
-                            break;
                         default:
                             break;
                     }
