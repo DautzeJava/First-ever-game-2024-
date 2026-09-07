@@ -35,6 +35,9 @@ void attackOrcOut(Orc *orc, SDL_Renderer *render);
 void attackOrcOutReverse(Orc *orc, SDL_Renderer *render);
 void attackOrcEnd(Orc *orc, SDL_Renderer *render, SDL_bool attacking);
 void attackOrcEndReverse(Orc *orc, SDL_Renderer *render, SDL_bool attacking);
+void attackOrc(Orc *orc, SDL_Renderer *render);
+void attackOrcReverse(Orc *orc, SDL_Renderer *render);
+
 static void walkSoundEffect();
 void checkFreeWalkSound(Mix_Chunk *walkSound);
 void movRight(Orc * orc);

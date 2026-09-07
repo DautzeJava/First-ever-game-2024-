@@ -178,17 +178,16 @@ int main(int argc, char *argv[]) {
                             if (!attacking) {
                                 attacking = SDL_TRUE;
                                 if (movToRight) {
-                                    attackOrcIn(orc, render, attacking);
-                                    attackOrcOut(orc, render);
-                                    attackOrcEnd(orc, render, attacking);
+                                    attackOrc(orc, render); // Corrigé : Attaque vers la droite
                                     attacking = SDL_FALSE;
                                 } else {
-                                    attackOrcInReverse(orc, render, attacking);
-                                    attackOrcOutReverse(orc, render);
-                                    attackOrcEndReverse(orc, render, attacking);
+                                    attackOrcReverse(orc, render); // Corrigé : Attaque vers la gauche
                                     attacking = SDL_FALSE;
                                 }
                             }
+                            break;
+                        case SDLK_k:
+                                attackOrc(orc, render);
                             break;
                         default:
                             break;
@@ -258,7 +257,7 @@ void cleanQuit(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *texture,
 
 // Fonction pour charger l'animation d'attaque vers la droite
 SDL_Texture *reverseOrcToRight(Orc *orc, SDL_Renderer *render) {
-    SDL_Surface *orcStaticToRight = IMG_Load("images\\SurMesure\\OrcStatic.png");
+    SDL_Surface *orcStaticToRight = IMG_Load("images\\SurMesure\\Orc\\OrcStatic.png");
     if (orcStaticToRight == NULL) {
         fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
         return NULL;
@@ -277,7 +276,7 @@ SDL_Texture *reverseOrcToRight(Orc *orc, SDL_Renderer *render) {
 
 // Fonction pour charger l'animation d'attaque vers la gauche
 SDL_Texture *reverseOrcToLeft(Orc *orc, SDL_Renderer *render) {
-    SDL_Surface *orcStaticToLeft = IMG_Load("images\\SurMesure\\OrcStaticReverse.png");
+    SDL_Surface *orcStaticToLeft = IMG_Load("images\\SurMesure\\Orc\\OrcStaticReverse.png");
     if (orcStaticToLeft == NULL) {
         fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
         return NULL;

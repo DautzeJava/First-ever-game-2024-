@@ -27,7 +27,7 @@ Orc *createOrc(int pv, int attack, SDL_Renderer *render, const char *imagePath) 
     orc->rect.w = ORC_WIDTH;
 
     // Chargement de l'image statique de l'orc (Chemin corrigé)
-    SDL_Surface *skin = IMG_Load("images\\SurMesure\\OrcStatic.png");
+    SDL_Surface *skin = IMG_Load("images\\SurMesure\\Orc\\OrcStatic.png");
     if (skin == NULL) {
         fprintf(stderr, "Erreur dans la création de la surface de l'orc : %s\n", IMG_GetError());
         free(orc);
@@ -57,11 +57,11 @@ void destroyOrc(Orc *orc)
     }
 }
 
-// Fonction pour animer l'attaque de l'orc
-void attackOrcIn(Orc *orc, SDL_Renderer *render, SDL_bool attacking) 
+
+void attackOrc(Orc *orc, SDL_Renderer *render) 
 {
     // Chemin corrigé
-    SDL_Surface *attackAnimationBaseSurface = IMG_Load("images/Orc-Attack01Test.png");
+    SDL_Surface *attackAnimationBaseSurface = IMG_Load("images\\SurMesure\\Orc\\AttackA\\OrcAttackA1.png");
     if (attackAnimationBaseSurface == NULL) {
         fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
         return;
@@ -75,38 +75,16 @@ void attackOrcIn(Orc *orc, SDL_Renderer *render, SDL_bool attacking)
         return;
     }
 
+        Mix_Chunk *soundAttack = NULL;
+    // Chemin corrigé
+    
     SDL_RenderClear(render);
     loadBackgroundA(render, orc);
     SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
     SDL_RenderPresent(render);
     
-    SDL_Delay(300); // Temps de préparation
+    SDL_Delay(100);
 
-    SDL_DestroyTexture(attackAnimation); // Libération de la texture après utilisation
-}
-
-
-
-// Fonction pour animer la fin de l'attaque de l'orc
-void attackOrcOut(Orc *orc, SDL_Renderer *render) {
-    // Chemin corrigé
-    SDL_Surface *attackAnimationBaseSurface = IMG_Load("images/Orc-Attack02.png");
-    if (attackAnimationBaseSurface == NULL) {
-        fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
-        return;
-    }
-
-    // Création de la texture à partir de la surface d'attaque
-    SDL_Texture *attackAnimation = SDL_CreateTextureFromSurface(render, attackAnimationBaseSurface);
-    SDL_FreeSurface(attackAnimationBaseSurface); // Libération de la surface après la création de la texture
-
-    if (attackAnimation == NULL) {
-        fprintf(stderr, "Erreur dans la création de la texture d'attaque : %s\n", SDL_GetError());
-        return;
-    }
-
-    Mix_Chunk *soundAttack = NULL;
-    // Chemin corrigé
     soundAttack = Mix_LoadWAV("sound/soundAttack.wav");
     if(soundAttack == NULL)
     {
@@ -116,27 +94,105 @@ void attackOrcOut(Orc *orc, SDL_Renderer *render) {
         Mix_PlayChannel(-1, soundAttack, 0);
     }
 
-    // Affichage de l'animation de fin d'attaque
+    SDL_DestroyTexture(attackAnimation);
+    // Chemin corrigé
+    attackAnimationBaseSurface = IMG_Load("images\\SurMesure\\Orc\\AttackA\\OrcAttackA2.png");
+    if (attackAnimationBaseSurface == NULL) {
+        fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
+        return;
+    }
+
+    attackAnimation = SDL_CreateTextureFromSurface(render, attackAnimationBaseSurface);
+    SDL_FreeSurface(attackAnimationBaseSurface);
+
+    if (attackAnimation == NULL) {
+        fprintf(stderr, "Erreur dans la création de la texture d'attaque : %s\n", SDL_GetError());
+        return;
+    }
+
     SDL_RenderClear(render);
     loadBackgroundA(render, orc);
     SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
     SDL_RenderPresent(render);
     
-    SDL_Delay(300); // Temps d'impact
-    
-    // CORRECTION DU BUG DE MEMOIRE : Libérer avant de mettre à NULL
-    if (soundAttack != NULL) {
-        Mix_FreeChunk(soundAttack);
-        soundAttack = NULL;
+    SDL_Delay(150); // Temps de préparation
+
+    SDL_DestroyTexture(attackAnimation);
+    // Chemin corrigé
+    attackAnimationBaseSurface = IMG_Load("images\\SurMesure\\Orc\\AttackA\\OrcAttackA3.png");
+    if (attackAnimationBaseSurface == NULL) {
+        fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
+        return;
     }
+
+    attackAnimation = SDL_CreateTextureFromSurface(render, attackAnimationBaseSurface);
+    SDL_FreeSurface(attackAnimationBaseSurface);
+
+    if (attackAnimation == NULL) {
+        fprintf(stderr, "Erreur dans la création de la texture d'attaque : %s\n", SDL_GetError());
+        return;
+    }
+
+    SDL_RenderClear(render);
+    loadBackgroundA(render, orc);
+    SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
+    SDL_RenderPresent(render);
     
-    SDL_DestroyTexture(attackAnimation); // Libération de la texture après utilisation
+    SDL_Delay(150); // Temps de préparation
+
+    SDL_DestroyTexture(attackAnimation);
+    // Chemin corrigé
+    attackAnimationBaseSurface = IMG_Load("images\\SurMesure\\Orc\\AttackA\\OrcAttackA4.png");
+    if (attackAnimationBaseSurface == NULL) {
+        fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
+        return;
+    }
+
+    attackAnimation = SDL_CreateTextureFromSurface(render, attackAnimationBaseSurface);
+    SDL_FreeSurface(attackAnimationBaseSurface);
+
+    if (attackAnimation == NULL) {
+        fprintf(stderr, "Erreur dans la création de la texture d'attaque : %s\n", SDL_GetError());
+        return;
+    }
+
+    SDL_RenderClear(render);
+    loadBackgroundA(render, orc);
+    SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
+    SDL_RenderPresent(render);
+    
+    SDL_Delay(150); // Temps de préparation
+
+    SDL_DestroyTexture(attackAnimation);
+    // Chemin corrigé
+    attackAnimationBaseSurface = IMG_Load("images\\SurMesure\\Orc\\AttackA\\OrcAttackA5.png");
+    if (attackAnimationBaseSurface == NULL) {
+        fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
+        return;
+    }
+
+    attackAnimation = SDL_CreateTextureFromSurface(render, attackAnimationBaseSurface);
+    SDL_FreeSurface(attackAnimationBaseSurface);
+
+    if (attackAnimation == NULL) {
+        fprintf(stderr, "Erreur dans la création de la texture d'attaque : %s\n", SDL_GetError());
+        return;
+    }
+
+    SDL_RenderClear(render);
+    loadBackgroundA(render, orc);
+    SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
+    SDL_RenderPresent(render);
+    
+    SDL_Delay(150); // Temps de préparation
+
+    SDL_DestroyTexture(attackAnimation);
 }
 
-void attackOrcEnd(Orc *orc, SDL_Renderer *render, SDL_bool attacking) 
+void attackOrcReverse(Orc *orc, SDL_Renderer *render) 
 {
     // Chemin corrigé
-    SDL_Surface *attackAnimationBaseSurface = IMG_Load("images/Orc-Attack03.png");
+    SDL_Surface *attackAnimationBaseSurface = IMG_Load("images\\SurMesure\\Orc\\AttackAreverse\\OrcAttackA1Reverse.png");
     if (attackAnimationBaseSurface == NULL) {
         fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
         return;
@@ -150,63 +206,16 @@ void attackOrcEnd(Orc *orc, SDL_Renderer *render, SDL_bool attacking)
         return;
     }
 
+        Mix_Chunk *soundAttack = NULL;
+    // Chemin corrigé
+    
     SDL_RenderClear(render);
     loadBackgroundA(render, orc);
     SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
     SDL_RenderPresent(render);
     
-    SDL_Delay(200); // Temps de récupération
+    SDL_Delay(100);
 
-    SDL_DestroyTexture(attackAnimation); // Libération de la texture après utilisation
-}
-
-void attackOrcInReverse(Orc *orc, SDL_Renderer *render, SDL_bool attacking) 
-{
-    // Chemin corrigé
-    SDL_Surface *attackAnimationBaseSurface = IMG_Load("images/Orc-Attack01TestReverse.png");
-    if (attackAnimationBaseSurface == NULL) {
-        fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
-        return;
-    }
-
-    SDL_Texture *attackAnimation = SDL_CreateTextureFromSurface(render, attackAnimationBaseSurface);
-    SDL_FreeSurface(attackAnimationBaseSurface);
-
-    if (attackAnimation == NULL) {
-        fprintf(stderr, "Erreur dans la création de la texture d'attaque : %s\n", SDL_GetError());
-        return;
-    }
-
-    SDL_RenderClear(render);
-    loadBackgroundA(render, orc);
-    SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
-    SDL_RenderPresent(render);
-    
-    SDL_Delay(300);
-
-    SDL_DestroyTexture(attackAnimation); // Libération de la texture après utilisation
-}
-
-// Fonction pour animer la fin de l'attaque de l'orc
-void attackOrcOutReverse(Orc *orc, SDL_Renderer *render) {
-    // Chemin corrigé
-    SDL_Surface *attackAnimationBaseSurface = IMG_Load("images/Orc-Attack02Reverse.png");
-    if (attackAnimationBaseSurface == NULL) {
-        fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
-        return;
-    }
-
-    // Création de la texture à partir de la surface d'attaque
-    SDL_Texture *attackAnimation = SDL_CreateTextureFromSurface(render, attackAnimationBaseSurface);
-    SDL_FreeSurface(attackAnimationBaseSurface); // Libération de la surface après la création de la texture
-
-    if (attackAnimation == NULL) {
-        fprintf(stderr, "Erreur dans la création de la texture d'attaque : %s\n", SDL_GetError());
-        return;
-    }
-
-    Mix_Chunk *soundAttack = NULL;
-    // Chemin corrigé
     soundAttack = Mix_LoadWAV("sound/soundAttack.wav");
     if(soundAttack == NULL)
     {
@@ -216,33 +225,15 @@ void attackOrcOutReverse(Orc *orc, SDL_Renderer *render) {
         Mix_PlayChannel(-1, soundAttack, 0);
     }
 
-    // Affichage de l'animation de fin d'attaque
-    SDL_RenderClear(render);
-    loadBackgroundA(render, orc);
-    SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
-    SDL_RenderPresent(render);
-    
-    SDL_Delay(300);
-    
-    // CORRECTION DU BUG DE MEMOIRE : Libérer avant de mettre à NULL
-    if (soundAttack != NULL) {
-        Mix_FreeChunk(soundAttack);
-        soundAttack = NULL;
-    }
-    
-    SDL_DestroyTexture(attackAnimation); // Libération de la texture après utilisation
-}
-
-void attackOrcEndReverse(Orc *orc, SDL_Renderer *render, SDL_bool attacking) 
-{
+    SDL_DestroyTexture(attackAnimation);
     // Chemin corrigé
-    SDL_Surface *attackAnimationBaseSurface = IMG_Load("images/Orc-Attack03Reverse.png");
+    attackAnimationBaseSurface = IMG_Load("images\\SurMesure\\Orc\\AttackAreverse\\OrcAttackA2Reverse.png");
     if (attackAnimationBaseSurface == NULL) {
         fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
         return;
     }
 
-    SDL_Texture *attackAnimation = SDL_CreateTextureFromSurface(render, attackAnimationBaseSurface);
+    attackAnimation = SDL_CreateTextureFromSurface(render, attackAnimationBaseSurface);
     SDL_FreeSurface(attackAnimationBaseSurface);
 
     if (attackAnimation == NULL) {
@@ -255,9 +246,78 @@ void attackOrcEndReverse(Orc *orc, SDL_Renderer *render, SDL_bool attacking)
     SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
     SDL_RenderPresent(render);
     
-    SDL_Delay(200);
+    SDL_Delay(150); // Temps de préparation
 
-    SDL_DestroyTexture(attackAnimation); // Libération de la texture après utilisation
+    SDL_DestroyTexture(attackAnimation);
+    // Chemin corrigé
+    attackAnimationBaseSurface = IMG_Load("images\\SurMesure\\Orc\\AttackAreverse\\OrcAttackA3Reverse.png");
+    if (attackAnimationBaseSurface == NULL) {
+        fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
+        return;
+    }
+
+    attackAnimation = SDL_CreateTextureFromSurface(render, attackAnimationBaseSurface);
+    SDL_FreeSurface(attackAnimationBaseSurface);
+
+    if (attackAnimation == NULL) {
+        fprintf(stderr, "Erreur dans la création de la texture d'attaque : %s\n", SDL_GetError());
+        return;
+    }
+
+    SDL_RenderClear(render);
+    loadBackgroundA(render, orc);
+    SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
+    SDL_RenderPresent(render);
+    
+    SDL_Delay(150); // Temps de préparation
+
+    SDL_DestroyTexture(attackAnimation);
+    // Chemin corrigé
+    attackAnimationBaseSurface = IMG_Load("images\\SurMesure\\Orc\\AttackAreverse\\OrcAttackA4Reverse.png");
+    if (attackAnimationBaseSurface == NULL) {
+        fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
+        return;
+    }
+
+    attackAnimation = SDL_CreateTextureFromSurface(render, attackAnimationBaseSurface);
+    SDL_FreeSurface(attackAnimationBaseSurface);
+
+    if (attackAnimation == NULL) {
+        fprintf(stderr, "Erreur dans la création de la texture d'attaque : %s\n", SDL_GetError());
+        return;
+    }
+
+    SDL_RenderClear(render);
+    loadBackgroundA(render, orc);
+    SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
+    SDL_RenderPresent(render);
+    
+    SDL_Delay(150); // Temps de préparation
+
+    SDL_DestroyTexture(attackAnimation);
+    // Chemin corrigé
+    attackAnimationBaseSurface = IMG_Load("images\\SurMesure\\Orc\\AttackAreverse\\OrcAttackA5Reverse.png");
+    if (attackAnimationBaseSurface == NULL) {
+        fprintf(stderr, "Erreur dans la création de la surface d'attaque : %s\n", IMG_GetError());
+        return;
+    }
+
+    attackAnimation = SDL_CreateTextureFromSurface(render, attackAnimationBaseSurface);
+    SDL_FreeSurface(attackAnimationBaseSurface);
+
+    if (attackAnimation == NULL) {
+        fprintf(stderr, "Erreur dans la création de la texture d'attaque : %s\n", SDL_GetError());
+        return;
+    }
+
+    SDL_RenderClear(render);
+    loadBackgroundA(render, orc);
+    SDL_RenderCopy(render, attackAnimation, NULL, &orc->rect);
+    SDL_RenderPresent(render);
+    
+    SDL_Delay(150); // Temps de préparation
+
+    SDL_DestroyTexture(attackAnimation);
 }
 
 void movRight(Orc * orc)
